@@ -1,0 +1,2 @@
+SPRITESHEETS = "ressources/spritesheets"
+
