@@ -22,14 +22,17 @@ class Spritesheet:
 
         self.colorkey = self.meta["colorkey"]
         self.cutsize = (self.meta["tile"]["width"], self.meta["tile"]["height"])
-        self.animatedsprites = {}
-        print(self.meta)
+        self.animated_images = {}
+        self.animated_durations = {}
         
         for anim_name, frames in self.meta["animations"].items():
             tilerects = self.meta["animations"][anim_name]
             rects = [pg.Rect(tilerect[0], tilerect[1], tilerect[2] - tilerect[0], tilerect[3] - tilerect[1]) for tilerect in tilerects]
-            self.animatedsprites[anim_name] = AnimatedSprite(anim_name, self.images_at(rects), self.meta["duration"])
-
+            # self.animatedsprites[anim_name] = AnimatedSprite(anim_name, self.images_at(rects), self.meta["duration"])
+            self.animated_images[anim_name] = self.images_at(rects)
+            self.animated_durations[anim_name] = self.meta["duration"]
+        
+        self.animatedsprite = AnimatedSprite(list(self.animated_images.keys())[0], self.animated_images, self.meta["duration"])
         # (xoffset, yoffset) tuple, size rectangle of each sprites
 
     # load an image without meta
@@ -51,4 +54,4 @@ class Spritesheet:
             self.meta = json.load(f)
 
     def get_animatedsprite(self, name):
-        return self.animatedsprites[name]
+        return self.animatedsprite

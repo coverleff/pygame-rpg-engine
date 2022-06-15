@@ -1,6 +1,6 @@
 import pygame as pg
 import pytmx
-
+import models
 
 '''
 This will be replaced by a camera game object that will process map tiles and stuff before returning something a pg.Surface to display
@@ -17,12 +17,20 @@ class MapRenderManager:
         tw = self.tiled_map_data.tilewidth
         
         self.tiles = []
+        self.colliders = []
         for i, layer in enumerate(self.tiled_map_data.visible_layers):
             for x, y, image in layer.tiles():
                 z = tiled_map.get_tile_properties(x, y, i)['z']
                 self.tiles.append((x*tw,y*th, (i + z)*th + y*th, image))
-        self.tiles.sort(key=lambda t: t[2])
+                
+                properties = tiled_map.get_tile_properties(x, y, i)
+                if "colliders" in properties.keys():
+                    colliders = properties["colliders"]
+                    self.colliders += [pg.Rect(c.x, c.y, c.width, c.height) for c in colliders]
 
+
+        self.tiles.sort(key=lambda t: t[2])
+    
 
     def render_map(self, surface):
         if self.tiled_map_data.background_color:
@@ -53,7 +61,7 @@ class MapRenderManager:
         if spritegroup is not None:
             spritegroup.draw(surface)
     
-    def intelligent_draw(self, spritegroup : pg.sprite.Group):
+    def intelligent_draw(self, spriteobjects : list[models.spriteobject.SpriteObject]):
         # We will make a list with the tiles and the sprite and sort them by z_visible value.
         # For sprites, the z_visible would correspond to rect.bottom, to which we add the layer they are at.
         # For tiles, we need to get their metadatas z and add the layer they are at.
@@ -66,12 +74,14 @@ class MapRenderManager:
         surface = pg.Surface(self.pixel_size)
 
         new_images = self.tiles[:]
-        for sprite in spritegroup:
-            new_images.append((sprite.rect.x, sprite.rect.y, sprite.rect.bottom + sprite.layer * th, sprite.image))
-
+        
+        for gameobj in spriteobjects:
+            sprite_rect = gameobj.sprite_rect.globalrect()
+            new_images.append((sprite_rect.left, sprite_rect.top, sprite_rect.bottom + gameobj.layer * th, gameobj.sprite.image))
         new_images.sort(key = lambda t: t[2])
         surface_blit = surface.blit
         for x, y, z, img in new_images:
             surface_blit(img, (x, y))
+
         pg.transform.smoothscale(surface, screen.get_size(), screen)
         pg.display.flip()

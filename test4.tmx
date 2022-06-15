@@ -11,10 +11,10 @@
  </layer>
  <layer id="1" name="ground1" width="4" height="4">
   <data encoding="csv">
-0,0,0,0,
-0,0,0,0,
-0,0,0,10,
-0,0,10,18
+0,0,0,41,
+0,0,41,0,
+0,41,0,0,
+41,0,0,0
 </data>
  </layer>
 </map>

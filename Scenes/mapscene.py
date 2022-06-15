@@ -1,10 +1,19 @@
 from Scenes.scene import Scene
-# MapScene we will use before we add any cameras, they will then be obsolete
-class MapScene(Scene):
-    def __init__(self, rendermanager, **kwds):
-        super().__init__(self, **kwds)
-        self.rendermanager = rendermanager
+from Scenes.mapmanager import MapManager
+import pygame as pg
 
+class MapScene(Scene):
+    def __init__(self, mapmanager : MapManager, screen, **kwds):
+        super().__init__(self, **kwds)
+        self.mapmanager = mapmanager
+        self.screen = screen
+
+        self.other_collision_rects += mapmanager.get_rect_colliders()
+        #self.rendermanager = rendermanager
+        
     def update_map(self):
         self.run_gameobject()
-        self.rendermanager.intelligent_draw(self.visible_sprites)
+        self.mapmanager.blit_surface(self.screen, self.visible_objects)
+
+        pg.display.flip()
+        #self.rendermanager.intelligent_draw(self.visible_objects)

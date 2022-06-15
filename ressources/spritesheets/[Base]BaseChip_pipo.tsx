@@ -254,6 +254,9 @@
    <property name="collision" type="bool" value="false"/>
    <property name="z" type="int" value="0"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="2" x="0" y="0" width="32" height="31.8244"/>
+  </objectgroup>
  </tile>
  <tile id="41">
   <properties>
@@ -1442,12 +1445,18 @@
    <property name="collision" type="bool" value="false"/>
    <property name="z" type="int" value="0"/>
   </properties>
+  <objectgroup draworder="index" id="3">
+   <object id="2" x="3" y="23" width="29" height="7"/>
+  </objectgroup>
  </tile>
  <tile id="239">
   <properties>
    <property name="collision" type="bool" value="false"/>
    <property name="z" type="int" value="0"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="23" width="28" height="7"/>
+  </objectgroup>
  </tile>
  <tile id="240">
   <properties>

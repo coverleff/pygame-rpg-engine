@@ -20,7 +20,7 @@ class Setup:
         self.clock = pg.time.Clock()
         Setup.clock = self.clock
 
-        self.fps = 100
+        self.fps = 30
 
         rect = pg.Rect((0, 0), (32, 32))
         image = pg.Surface((32, 32))

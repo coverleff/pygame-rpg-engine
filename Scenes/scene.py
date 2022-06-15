@@ -1,5 +1,8 @@
 import pygame as pg
 from models.gameobject import GameObject
+from models.spriteobject import SpriteObject
+import models.collisionobject
+from models.collisionobject import CollisionObject
 class UnknownGameObject(Exception):
     pass
 class SameGameObject(Exception):
@@ -12,7 +15,14 @@ class Scene(object):
         self.name = name
         Scene.scene_instances.append(self)
         self.gameobjects = {}
-        self.visible_sprites = pg.sprite.RenderPlain()
+
+        ################################################################
+        # Add list of gameobjects with special attributes
+        ################################################################
+
+        self.visible_objects = []
+        self.collision_objects = []
+        self.other_collision_rects = []
 
     def get_gameobject(self, identifier):
         try:
@@ -23,14 +33,23 @@ class Scene(object):
     def add_gameobject(self, instance: GameObject):
         if instance.identifier in self.gameobjects.keys():
             raise SameGameObject
-        
+
         self.gameobjects[instance.identifier] = instance
 
+        ################################################################
+        # Add gameobjects with special attributes                      
+        # - SpriteObject: objects with a sprite to be rendered
+        # - CollisionObject: objects with a collision box
+        ################################################################
+        if issubclass(type(instance), SpriteObject):
+            self.visible_objects.append(instance)
 
-
-        if hasattr(instance, "sprite"):
-            self.visible_sprites.add(instance.sprite)
+        if issubclass(type(instance), CollisionObject):
+            self.collision_objects.append(instance)
 
     def run_gameobject(self):
         for go in self.gameobjects.values():
             go.update_tick()
+
+    def update(self):
+        models.collisionobject.update_collisions(self.collision_objects, self.other_collision_rects)
