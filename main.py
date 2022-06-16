@@ -4,15 +4,15 @@ import pygame as pg
 from rendermap import MapRenderManager
 import utils.path, utils.spritesheet
 import models.spriteobject
-import models.player
+import models.entity
 import sys
 from Scenes.mapmanager import MapManager
-
+import models.camera
 class Main:
 
     def __init__(self, *args, **kwargs):
         self.setup = Setup()
-        manager = MapManager('testmap.tmx')
+        manager = MapManager(utils.path.get_map('testmap'))
         self.Scene = MapScene(manager, self.setup.screen)
         self.clock = self.setup.clock
         self.test()
@@ -50,21 +50,21 @@ class Main:
                 print(self.go.collision_rect)
 
             
-            self.Scene.run_gameobject()
             self.Scene.update()
-            self.Scene.update_map()
             self.debug_run()
 
     def test(self):
-        sheet = utils.spritesheet.Spritesheet("ressources/spritesheets/spritesheet_zelda.png", "ressources/spritesheets/spritesheet_zelda.json")
-        self.go = models.player.Player(position = pg.Vector2(50, 10), sprite = sheet.animatedsprite)
+        print('uh')
+        print(utils.path.get_spritesheet("Characters/Character 1"))
+        sheet = utils.spritesheet.Spritesheet(*utils.path.get_spritesheet("Characters/Character 1"))
+        self.go = models.entity.Entity(position = pg.Vector2(50, 10), sprite = sheet.animatedsprite)
         self.Scene.add_gameobject(self.go)
 
-        sheet2 = utils.spritesheet.Spritesheet("ressources/spritesheets/spritesheet_zelda.png", "ressources/spritesheets/spritesheet_zelda.json")
-        self.go2 = models.player.Player(position = pg.Vector2(50, 50), sprite = sheet2.animatedsprite, movable=False)
+        sheet2 = utils.spritesheet.Spritesheet(*utils.path.get_spritesheet("Characters/Character 1"))
+        self.go2 = models.entity.Entity(position = pg.Vector2(50, 50), sprite = sheet2.animatedsprite, movable=False)
+        
         self.Scene.add_gameobject(self.go2)
-
-
+        self.Scene.add_gameobject(models.camera.Camera(self.Scene))
     def debug_run(self):
         pass
 

@@ -16,6 +16,10 @@ class MapManager:
         self.tiles = []
         self.tiles_properties = {}
         for i, layer in enumerate(tiled_map.visible_layers):
+            print(layer)
+            if type(layer) !=  pytmx.TiledTileLayer:
+                continue
+
             for x, y, image in layer.tiles():
                 # Tile z axis for rendering purposes
                 self.tiles_properties[(x,y,i)] = tiled_map.get_tile_properties(x, y, i)
@@ -36,7 +40,11 @@ class MapManager:
 
         return rects
 
-    def blit_surface(self, surface : pg.Surface, gameobjects):
+    def blit_surface(self, surface : pg.Surface, gameobjects, frame: pg.Rect = None):
+        "Given a surface and game objects, blit them in order of their 'z' axis. Also can be used by a camera by cutting the map with option frame"
+        if frame is None:
+            frame = pg.Rect((0,0), self.pixel_size)
+
         " From a rect, blit in on a surface and return it "
         tw, th = self.th, self.tw
         real_surface = pg.Surface(self.pixel_size)
@@ -53,5 +61,8 @@ class MapManager:
         for x, y, z, img in new_tile_images:
             surface_blit(img, (x, y))
 
+        cut_surface = real_surface.subsurface(frame)
+
         # Resize the real image to the screen...
-        pg.transform.smoothscale(real_surface, surface.get_size(), surface)
+        pg.transform.smoothscale(cut_surface, surface.get_size(), surface)
+

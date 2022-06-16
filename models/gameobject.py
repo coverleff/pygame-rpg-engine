@@ -1,6 +1,7 @@
 import uuid
 import pygame as pg
 import models.localposition
+import Scenes.scene
 
 class GameObject:
     def __init__(self, position, identifier=None, **kwargs):

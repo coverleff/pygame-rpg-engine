@@ -53,3 +53,4 @@ class Scene(object):
 
     def update(self):
         models.collisionobject.update_collisions(self.collision_objects, self.other_collision_rects)
+        self.run_gameobject()

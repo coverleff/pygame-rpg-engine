@@ -5,10 +5,10 @@ import random
 
 ''' ugly code that does the job of generating metadata for spritesheets'''
 colors = pg.colordict.THECOLORS
-name = input("Input spritesheet name (without .json): ")
+name = input("Input spritesheet name (without .json): ").strip('.png')
 pg.init()
 
-img = pg.image.load(name+".png")
+img = pg.image.load(name + ".png")
 
 rect = img.get_rect()
 screen = pg.display.set_mode(rect.size)
@@ -18,11 +18,14 @@ screen.blit(img, (0,0))
 
 print("size: {}".format(rect.size))
 
+
 while True:
     if pg.event.poll().type == pg.QUIT:
         break
 
     pg.display.flip()
+
+
 
 
 '''

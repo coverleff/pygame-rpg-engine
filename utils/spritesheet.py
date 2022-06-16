@@ -21,6 +21,10 @@ class Spritesheet:
                 raise SystemExit(message)
 
         self.colorkey = self.meta["colorkey"]
+
+        if self.colorkey == "None":
+            self.colorkey = None
+
         self.cutsize = (self.meta["tile"]["width"], self.meta["tile"]["height"])
         self.animated_images = {}
         self.animated_durations = {}
@@ -43,7 +47,9 @@ class Spritesheet:
             if self.colorkey == -1:
                 self.colorkey = image.get_at((0,0))
             image.set_colorkey(self.colorkey, pg.RLEACCEL)
-        return image.convert()
+            return image.convert()
+        else:
+            return image.convert()
 
     # load list of images without meta
     def images_at(self, rects):
