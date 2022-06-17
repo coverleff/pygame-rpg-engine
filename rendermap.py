@@ -3,7 +3,7 @@ import pytmx
 import models
 
 '''
-This will be replaced by a camera game object that will process map tiles and stuff before returning something a pg.Surface to display
+This will be replaced by a camera game object that will process map tiles and stuff before returning a pg.Surface to display
 '''
 
 class MapRenderManager:
